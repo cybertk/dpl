@@ -88,7 +88,7 @@ module DPL
       def put_file_request(local_file_path, upload_path, matrix_params)
         url = URI.parse(self.url)
 
-        http = Net::HTTP.new(url.host, url.port)
+        http = Net::HTTP.new(url.host, url.port, {'Transfer-Encoding' => 'chunked'})
         http.use_ssl = true
 
         params = ''
