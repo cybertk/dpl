@@ -88,7 +88,6 @@ module DPL
       def put_file_request(local_file_path, upload_path, matrix_params)
         url = URI.parse(self.url)
 
-        data = File.read(local_file_path)
         http = Net::HTTP.new(url.host, url.port)
         http.use_ssl = true
 
@@ -102,7 +101,7 @@ module DPL
 
         request = Net::HTTP::Put.new("#{upload_path}")
         request.basic_auth user, key
-        request.body = data
+        request.body_stream = File.open(local_file_path)
 
         return http.request(request)
       end
