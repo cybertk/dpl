@@ -88,7 +88,7 @@ module DPL
       def put_file_request(local_file_path, upload_path, matrix_params)
         url = URI.parse(self.url)
 
-        http = Net::HTTP.new(url.host, url.port, {'Transfer-Encoding' => 'chunked'})
+        http = Net::HTTP.new(url.host, url.port)
         http.use_ssl = true
 
         params = ''
@@ -101,6 +101,8 @@ module DPL
 
         request = Net::HTTP::Put.new("#{upload_path}")
         request.basic_auth user, key
+        request['Transfer-Encoding'] = 'chunked'
+        # request['Content-Length'] = f.stat.size
         request.body_stream = File.open(local_file_path)
 
         return http.request(request)
